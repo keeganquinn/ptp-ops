@@ -1,0 +1,13 @@
+---
+- name: Standard machine configuration for Arch
+  hosts: servers
+
+  roles:
+    - arch
+
+- name: Webserver configuration
+  hosts: servers
+
+  roles:
+    - rails
+    - webserver

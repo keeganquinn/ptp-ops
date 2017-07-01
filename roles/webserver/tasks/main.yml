@@ -1,0 +1,26 @@
+---
+- name: Install nginx package
+  become: yes
+  pacman: name=nginx state=present
+
+- name: Install certbot package
+  become: yes
+  pacman: name=certbot state=present
+
+- name: Copy nginx configuration
+  become: yes
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+  notify: restart nginx
+
+- name: Create /etc/nginx/sites-enabled
+  become: yes
+  file:
+    path: /etc/nginx/sites-enabled
+    state: directory
+    mode: 0755
+  notify: restart nginx
+
+- name: Copy nginx virtual hosts
+  become: yes
+  copy: src=sites dest=/etc/nginx/sites-enabled
+  notify: restart nginx

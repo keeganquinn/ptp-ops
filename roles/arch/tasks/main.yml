@@ -1,0 +1,20 @@
+---
+- name: Copy sudo configuration
+  become: yes
+  copy: src=nopasswd.sudoers dest=/etc/sudoers.d/nopasswd mode=0440
+
+- name: Create sudo group
+  become: yes
+  group:
+    name: sudo
+    state: present
+
+- name: Apply sudo group
+  become: yes
+  user:
+    name: keegan
+    groups: sudo
+
+- name: Update and upgrade packages
+  become: yes
+  pacman: update_cache=yes upgrade=yes
