@@ -22,5 +22,5 @@
 
 - name: Copy nginx virtual hosts
   become: yes
-  copy: src=sites dest=/etc/nginx/sites-enabled
+  copy: src=sites/ dest=/etc/nginx/sites-enabled
   notify: restart nginx
