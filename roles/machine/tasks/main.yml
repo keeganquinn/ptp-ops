@@ -24,3 +24,8 @@
   become: yes
   pacman: update_cache=yes upgrade=yes
   when: ansible_pkg_mgr == "pacman"
+
+- name: Install bind-tools package on Arch
+  become: yes
+  pacman: name=bind-tools state=present
+  when: ansible_pkg_mgr == "pacman"
