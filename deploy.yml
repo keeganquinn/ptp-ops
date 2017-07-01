@@ -1,12 +1,12 @@
 ---
-- name: Standard machine configuration for Arch
+- name: Standard machine configuration
   hosts: servers
 
   roles:
-    - arch
+    - machine
 
 - name: Webserver configuration
-  hosts: servers
+  hosts: drei.personaltelco.net
 
   roles:
     - rails
