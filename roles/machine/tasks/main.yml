@@ -29,3 +29,13 @@
   become: yes
   pacman: name=bind-tools state=present
   when: ansible_pkg_mgr == "pacman"
+
+- name: Install postfix package on Arch
+  become: yes
+  pacman: name=postfix state=present
+  when: ansible_pkg_mgr == "pacman"
+
+- name: Enable and start the postfix service
+  become: yes
+  service: name=postfix enabled=yes state=started
+  when: ansible_pkg_mgr == "pacman"
