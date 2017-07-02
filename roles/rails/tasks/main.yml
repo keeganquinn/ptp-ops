@@ -1,0 +1,177 @@
+---
+- name: Install postgresql package
+  become: yes
+  pacman: name=postgresql state=present
+
+- name: Initialize postgresql cluster
+  become: yes
+  become_user: postgres
+  command: initdb --locale en_US.UTF-8 -E UTF8 -D /var/lib/postgres/data
+  args:
+    creates: /var/lib/postgres/data/PG_VERSION
+
+- name: Enable and start the postgresql service
+  become: yes
+  service: name=postgresql enabled=yes state=started
+
+- name: Install graphviz package
+  become: yes
+  pacman: name=graphviz state=present
+
+- name: Install nodejs package
+  become: yes
+  pacman: name=nodejs state=present
+
+- name: Install phantomjs package
+  become: yes
+  pacman: name=phantomjs state=present
+
+- name: Install python-psycopg2 package
+  become: yes
+  pacman: name=python-psycopg2 state=present
+
+- name: Install autoconf package
+  become: yes
+  pacman: name=autoconf state=present
+
+- name: Install bison package
+  become: yes
+  pacman: name=bison state=present
+
+- name: Install gcc5 package
+  become: yes
+  pacman: name=gcc5 state=present
+
+- name: Install openssl-1.0 package
+  become: yes
+  pacman: name=openssl-1.0 state=present
+
+- name: Install libyaml package
+  become: yes
+  pacman: name=libyaml state=present
+
+- name: Install readline package
+  become: yes
+  pacman: name=readline state=present
+
+- name: Install zlib package
+  become: yes
+  pacman: name=zlib state=present
+
+- name: Install ncurses package
+  become: yes
+  pacman: name=ncurses state=present
+
+- name: Install libffi package
+  become: yes
+  pacman: name=libffi state=present
+
+- name: Install gdbm package
+  become: yes
+  pacman: name=gdbm state=present
+
+- name: Install imagemagick package
+  become: yes
+  pacman: name=imagemagick state=present
+
+- name: Create deploy user
+  become: yes
+  user:
+    name: deploy
+    comment: Application Deployment
+    shell: /bin/bash
+    groups: sudo
+
+- name: Copy the SSH authorized_keys file for the deploy user
+  become: yes
+  authorized_key:
+    user: deploy
+    key: https://raw.githubusercontent.com/personaltelco/ptp-openwrt-files/master/etc/dropbear/authorized_keys
+
+- name: Copy application-specific configuration
+  become: yes
+  copy:
+    src: apps/
+    dest: /etc/rails
+    owner: deploy
+    group: deploy
+    mode: 0600
+
+- name: Install rbenv for the deploy user
+  become: yes
+  become_user: deploy
+  git:
+    repo: https://github.com/rbenv/rbenv.git
+    dest: /home/deploy/.rbenv
+    version: master
+
+- name: Install rbenv-sudo for the deploy user
+  become: yes
+  become_user: deploy
+  git:
+    repo: https://github.com/dcarley/rbenv-sudo.git
+    dest: /home/deploy/.rbenv/plugins/rbenv-sudo
+    version: master
+
+- name: Install ruby-build for the deploy user
+  become: yes
+  become_user: deploy
+  git:
+    repo: https://github.com/rbenv/ruby-build.git
+    dest: /home/deploy/.rbenv/plugins/ruby-build
+    version: master
+
+- name: Copy the bashrc for the deploy user
+  become: yes
+  become_user: deploy
+  copy: src=bashrc dest=/home/deploy/.bashrc
+
+- name: Copy the profile for the deploy user
+  become: yes
+  become_user: deploy
+  copy: src=profile dest=/home/deploy/.profile
+
+- name: Install Ruby 2.3.3 for the deploy user
+  become: yes
+  become_user: deploy
+  shell: CC=/usr/bin/gcc-5 PKG_CONFIG_PATH=/usr/lib/openssl-1.0/pkgconfig /home/deploy/.rbenv/bin/rbenv install -s 2.3.3
+  args:
+    creates: /home/deploy/.rbenv/versions/2.3.3
+
+- name: Install Bundler for the deploy user
+  become: yes
+  become_user: deploy
+  shell: RBENV_VERSION=2.3.3 /home/deploy/.rbenv/shims/gem install bundler
+  args:
+    creates: /home/deploy/.rbenv/versions/2.3.3/bin/bundler
+
+- name: Install Foreman for the deploy user
+  become: yes
+  become_user: deploy
+  shell: RBENV_VERSION=2.3.3 /home/deploy/.rbenv/shims/gem install foreman
+  args:
+    creates: /home/deploy/.rbenv/versions/2.3.3/bin/foreman
+
+- name: Create /srv/rails
+  become: yes
+  file:
+    path: /srv/rails
+    state: directory
+    mode: 0755
+    owner: deploy
+    group: deploy
+
+- name: Create cwnmyr user in Postgres
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: cwnmyr
+    password: cwnmyr
+
+- name: Create cwnmyr database in Postgres
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: cwnmyr
+    owner: cwnmyr
+    encoding: UTF-8

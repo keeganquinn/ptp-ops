@@ -12,6 +12,13 @@
   copy: src=nginx.conf dest=/etc/nginx/nginx.conf
   notify: restart nginx
 
+- name: Generate Diffie-Hellman parameters for nginx
+  become: yes
+  command: openssl dhparam -out /etc/nginx/dhparams.pem 2048
+  args:
+    creates: /etc/nginx/dhparams.pem
+  notify: restart nginx
+
 - name: Create /etc/nginx/sites-enabled
   become: yes
   file:
