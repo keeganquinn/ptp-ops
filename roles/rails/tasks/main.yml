@@ -26,6 +26,10 @@
   become: yes
   pacman: name=phantomjs state=present
 
+- name: Install yarn package
+  become: yes
+  pacman: name=yarn state=present
+
 - name: Install python-psycopg2 package
   become: yes
   pacman: name=python-psycopg2 state=present
@@ -131,26 +135,26 @@
   become_user: deploy
   copy: src=profile dest=/home/deploy/.profile
 
-- name: Install Ruby 2.3.3 for the deploy user
+- name: Install Ruby 2.4.1 for the deploy user
   become: yes
   become_user: deploy
-  shell: CC=/usr/bin/gcc-5 PKG_CONFIG_PATH=/usr/lib/openssl-1.0/pkgconfig /home/deploy/.rbenv/bin/rbenv install -s 2.3.3
+  shell: CC=/usr/bin/gcc-5 PKG_CONFIG_PATH=/usr/lib/openssl-1.0/pkgconfig /home/deploy/.rbenv/bin/rbenv install -s 2.4.1
   args:
-    creates: /home/deploy/.rbenv/versions/2.3.3
+    creates: /home/deploy/.rbenv/versions/2.4.1
 
 - name: Install Bundler for the deploy user
   become: yes
   become_user: deploy
-  shell: RBENV_VERSION=2.3.3 /home/deploy/.rbenv/shims/gem install bundler
+  shell: RBENV_VERSION=2.4.1 /home/deploy/.rbenv/shims/gem install bundler
   args:
-    creates: /home/deploy/.rbenv/versions/2.3.3/bin/bundler
+    creates: /home/deploy/.rbenv/versions/2.4.1/bin/bundler
 
 - name: Install Foreman for the deploy user
   become: yes
   become_user: deploy
-  shell: RBENV_VERSION=2.3.3 /home/deploy/.rbenv/shims/gem install foreman
+  shell: RBENV_VERSION=2.4.1 /home/deploy/.rbenv/shims/gem install foreman
   args:
-    creates: /home/deploy/.rbenv/versions/2.3.3/bin/foreman
+    creates: /home/deploy/.rbenv/versions/2.4.1/bin/foreman
 
 - name: Create /srv/rails
   become: yes
