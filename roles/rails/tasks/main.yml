@@ -42,9 +42,9 @@
   become: yes
   pacman: name=bison state=present
 
-- name: Install gcc5 package
+- name: Install gcc package
   become: yes
-  pacman: name=gcc5 state=present
+  pacman: name=gcc state=present
 
 - name: Install openssl-1.0 package
   become: yes
@@ -135,26 +135,26 @@
   become_user: deploy
   copy: src=profile dest=/home/deploy/.profile
 
-- name: Install Ruby 2.4.1 for the deploy user
+- name: Install Ruby 2.4.3 for the deploy user
   become: yes
   become_user: deploy
-  shell: CC=/usr/bin/gcc-5 PKG_CONFIG_PATH=/usr/lib/openssl-1.0/pkgconfig /home/deploy/.rbenv/bin/rbenv install -s 2.4.1
+  shell: PKG_CONFIG_PATH=/usr/lib/openssl-1.0/pkgconfig /home/deploy/.rbenv/bin/rbenv install -s 2.4.3
   args:
-    creates: /home/deploy/.rbenv/versions/2.4.1
+    creates: /home/deploy/.rbenv/versions/2.4.3
 
 - name: Install Bundler for the deploy user
   become: yes
   become_user: deploy
-  shell: RBENV_VERSION=2.4.1 /home/deploy/.rbenv/shims/gem install bundler
+  shell: RBENV_VERSION=2.4.3 /home/deploy/.rbenv/shims/gem install bundler
   args:
-    creates: /home/deploy/.rbenv/versions/2.4.1/bin/bundler
+    creates: /home/deploy/.rbenv/versions/2.4.3/bin/bundler
 
 - name: Install Foreman for the deploy user
   become: yes
   become_user: deploy
-  shell: RBENV_VERSION=2.4.1 /home/deploy/.rbenv/shims/gem install foreman
+  shell: RBENV_VERSION=2.4.3 /home/deploy/.rbenv/shims/gem install foreman
   args:
-    creates: /home/deploy/.rbenv/versions/2.4.1/bin/foreman
+    creates: /home/deploy/.rbenv/versions/2.4.3/bin/foreman
 
 - name: Create /srv/rails
   become: yes
