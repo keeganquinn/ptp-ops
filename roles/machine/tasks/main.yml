@@ -15,6 +15,36 @@
     name: keegan
     groups: sudo
 
+- name: Add nodesource APT key
+  become: yes
+  apt_key:
+    url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
+    state: present
+  when: ansible_pkg_mgr == "apt"
+
+- name: Enable nodesource APT source
+  become: yes
+  apt_repository:
+    repo: deb [arch=amd64] https://deb.nodesource.com/node_8.x stretch main
+    state: present
+    filename: nodesource
+  when: ansible_pkg_mgr == "apt"
+
+- name: Add yarn APT key
+  become: yes
+  apt_key:
+    url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
+    state: present
+  when: ansible_pkg_mgr == "apt"
+
+- name: Enable yarn APT source
+  become: yes
+  apt_repository:
+    repo: deb https://dl.yarnpkg.com/debian/ stable main
+    state: present
+    filename: yarn
+  when: ansible_pkg_mgr == "apt"
+
 - name: Update and upgrade Debian packages
   become: yes
   apt: update_cache=yes upgrade=dist

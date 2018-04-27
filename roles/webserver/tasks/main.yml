@@ -1,15 +1,28 @@
 ---
-- name: Install nginx package
+- name: Install nginx package on Debian
+  become: yes
+  apt: name=nginx state=present
+  when: ansible_pkg_mgr == "apt"
+
+- name: Install nginx package on Arch
   become: yes
   pacman: name=nginx state=present
+  when: ansible_pkg_mgr == "pacman"
 
-- name: Install certbot package
+- name: Install certbot package on Debian
+  become: yes
+  apt: name=certbot state=present
+  when: ansible_pkg_mgr == "apt"
+
+- name: Install certbot package on Arch
   become: yes
   pacman: name=certbot state=present
+  when: ansible_pkg_mgr == "pacman"
 
 - name: Copy nginx configuration
   become: yes
   copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+  when: ansible_pkg_mgr == "pacman"
   notify: restart nginx
 
 - name: Generate Diffie-Hellman parameters for nginx

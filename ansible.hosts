@@ -3,3 +3,4 @@ localhost ansible_connection=local
 [servers]
 drei.personaltelco.net
 knod.personaltelco.net
+turn.personaltelco.net

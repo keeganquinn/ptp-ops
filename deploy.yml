@@ -6,7 +6,7 @@
     - machine
 
 - name: Webserver configuration
-  hosts: drei.personaltelco.net
+  hosts: drei.personaltelco.net,turn.personaltelco.net
 
   roles:
     - rails
