@@ -1,9 +1,46 @@
 ---
-- include: '{{ item }}'
-  with_first_found:
-    - files:
-        - '{{ ansible_pkg_mgr }}.yml'
-      skip: true
+- name: Accept oracle license
+  become: yes
+  debconf:
+    name: oracle-java8-installer
+    question: shared/accepted-oracle-license-v1-1
+    value: 'true'
+    vtype: select
+
+- name: Accept oracle license
+  become: yes
+  debconf:
+    name: oracle-java8-installer
+    question: shared/accepted-oracle-license-v1-1
+    value: 'true'
+    vtype: seen
+
+- name: Install Rails application server packages
+  become: yes
+  apt:
+    state: present
+    name:
+      - autoconf
+      - bison
+      - build-essential
+      - elasticsearch
+      - git
+      - graphviz
+      - imagemagick
+      - libffi-dev
+      - libgdbm-dev
+      - libmagickwand-6.q16-dev
+      - libncurses5-dev
+      - libpq-dev
+      - libreadline6-dev
+      - libssl-dev
+      - libyaml-dev
+      - nodejs
+      - oracle-java8-installer
+      - postgresql
+      - python-psycopg2
+      - yarn
+      - zlib1g-dev
 
 - name: Create deploy user
   become: yes
@@ -89,6 +126,16 @@
     mode: 0755
     owner: deploy
     group: deploy
+
+- name: Copy Elasticsearch configuration
+  become: yes
+  copy:
+    src: elasticsearch.yml
+    dest: /etc/elasticsearch/elasticsearch.yml
+    owner: root
+    group: elasticsearch
+    mode: 0660
+  notify: restart elasticsearch
 
 - name: Copy Postgres configuration
   become: yes

@@ -15,6 +15,36 @@
     name: keegan
     groups: sudo
 
+- name: Add elasticsearch APT key
+  become: yes
+  apt_key:
+    url: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
+    state: present
+  when: ansible_pkg_mgr == "apt"
+
+- name: Enable elasticsearch APT source
+  become: yes
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/6.x/apt stable main
+    state: present
+    filename: elasticsearch
+  when: ansible_pkg_mgr == "apt"
+
+- name: Add java APT key
+  become: yes
+  apt_key:
+    url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xC2518248EEA14886
+    state: present
+  when: ansible_pkg_mgr == "apt"
+
+- name: Enable java APT source
+  become: yes
+  apt_repository:
+    repo: deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main
+    state: present
+    filename: java
+  when: ansible_pkg_mgr == "apt"
+
 - name: Add nodesource APT key
   become: yes
   apt_key:
