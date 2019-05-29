@@ -9,5 +9,6 @@
   hosts: turn.personaltelco.net
 
   roles:
+    - email
     - rails
     - webserver

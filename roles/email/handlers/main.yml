@@ -1,0 +1,24 @@
+---
+- name: restart opendkim
+  become: yes
+  systemd: daemon_reload=yes name=opendkim state=restarted enabled=yes
+
+- name: restart postfix
+  become: yes
+  service: name=postfix state=restarted enabled=yes
+
+- name: rebuild postfix aliases
+  become: yes
+  command: newaliases
+
+- name: rebuild postfix sasl_passwd
+  become: yes
+  command: postmap /etc/postfix/sasl_passwd
+
+- name: rebuild postfix transport
+  become: yes
+  command: postmap /etc/postfix/transport
+
+- name: rebuild postfix virtual
+  become: yes
+  command: postmap /etc/postfix/virtual

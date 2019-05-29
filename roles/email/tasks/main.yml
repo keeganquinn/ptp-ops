@@ -1,0 +1,13 @@
+---
+- name: Install email packages
+  become: yes
+  apt:
+    state: present
+    name:
+      - postfix
+      - procmail
+
+- name: Copy postfix main configuration
+  become: yes
+  copy: src=main.cf dest=/etc/postfix/main.cf
+  notify: restart postfix
