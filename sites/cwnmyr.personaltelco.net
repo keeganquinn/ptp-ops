@@ -43,4 +43,16 @@ server {
 
     client_max_body_size 4G;
     keepalive_timeout 10;
+
+    location ~ ^/hosts(/.*)?$ {
+        return 301 /devices$1;
+    }
+
+    location ~ ^/host_properties(/.*)?$ {
+        return 301 /device_properties$1;
+    }
+
+    location ~ ^/host_types(/.*)?$ {
+        return 301 /device_types$1;
+    }
 }
