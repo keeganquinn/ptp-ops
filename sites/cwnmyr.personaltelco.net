@@ -56,4 +56,16 @@ server {
     location ~ ^/host_types(/.*)?$ {
         return 301 /device_types$1;
     }
+
+    location ~ ^/device_properties(/.*)?$ {
+        return 301 /browse;
+    }
+
+    location ~ ^/interfaces(/.*)?$ {
+        return 301 /browse;
+    }
+
+    location ~ ^/node_links(/.*)?$ {
+        return 301 /browse;
+    }
 }
