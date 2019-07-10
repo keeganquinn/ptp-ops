@@ -81,6 +81,16 @@
     user: deploy
     key: https://raw.githubusercontent.com/personaltelco/ptp-openwrt-files/master/etc/dropbear/authorized_keys
 
+- name: Copy rebundle script
+  become: yes
+  become_user: deploy
+  copy:
+    src: rebundle.sh
+    dest: /home/deploy
+    owner: deploy
+    group: deploy
+    mode: 0755
+
 - name: Copy application-specific configuration
   become: yes
   copy:
