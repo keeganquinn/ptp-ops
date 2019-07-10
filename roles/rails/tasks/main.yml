@@ -83,7 +83,6 @@
 
 - name: Copy rebundle script
   become: yes
-  become_user: deploy
   copy:
     src: rebundle.sh
     dest: /home/deploy
