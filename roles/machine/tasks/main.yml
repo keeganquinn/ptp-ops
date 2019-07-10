@@ -18,55 +18,44 @@
 - name: Add elasticsearch APT key
   become: yes
   apt_key:
-    url: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
     state: present
-
-- name: Enable elasticsearch APT source
-  become: yes
-  apt_repository:
-    repo: deb https://artifacts.elastic.co/packages/6.x/apt stable main
-    state: present
-    filename: elasticsearch
-
-- name: Add java APT key
-  become: yes
-  apt_key:
-    url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xC2518248EEA14886
-    state: present
-
-- name: Enable java APT source
-  become: yes
-  apt_repository:
-    repo: deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main
-    state: present
-    filename: java
 
 - name: Add nodesource APT key
   become: yes
   apt_key:
-    url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
     state: present
-
-- name: Enable nodesource APT source
-  become: yes
-  apt_repository:
-    repo: deb [arch=amd64] https://deb.nodesource.com/node_8.x stretch main
-    state: present
-    filename: nodesource
 
 - name: Add yarn APT key
   become: yes
   apt_key:
-    url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
+    url: https://dl.yarnpkg.com/debian/pubkey.gpg
     state: present
 
-- name: Enable yarn APT source
+- name: Copy APT sources
   become: yes
-  apt_repository:
-    repo: deb https://dl.yarnpkg.com/debian/ stable main
-    state: present
-    filename: yarn
+  copy: src=sources.list dest=/etc/apt/sources.list
 
 - name: Update and upgrade Debian packages
   become: yes
   apt: update_cache=yes upgrade=dist
+
+- name: Install machine packages
+  become: yes
+  apt:
+    state: present
+    name:
+      - apt-listchanges
+      - curl
+      - deborphan
+      - emacs
+      - file
+      - finger
+      - git
+      - lftp
+      - mlocate
+      - nmap
+      - screen
+      - tcpdump
+      - unzip
