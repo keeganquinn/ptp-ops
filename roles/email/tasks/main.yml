@@ -7,6 +7,19 @@
       - postfix
       - procmail
 
+- name: Copy aliases file
+  become: yes
+  copy:
+    src: aliases
+    dest: /etc/aliases
+  notify: rebuild postfix aliases
+
+- name: Copy hosts file
+  become: yes
+  copy:
+    src: hosts
+    dest: /etc/hosts
+
 - name: Copy postfix main configuration
   become: yes
   copy: src=main.cf dest=/etc/postfix/main.cf

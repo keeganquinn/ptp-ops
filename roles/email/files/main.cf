@@ -1,4 +1,4 @@
-mydomain = turn.personaltelco.net
+mydomain = personaltelco.net
 
 compatibility_level = 2
 mynetworks_style = host
