@@ -25,11 +25,11 @@
       - build-essential
       - elasticsearch
       - graphviz
-      - imagemagick
+      - imagemagick-6.q16
       - libffi-dev
       - libgdbm-dev
       - libmagickwand-6.q16-dev
-      - libncurses5-dev
+      - libncurses-dev
       - libpq-dev
       - libreadline6-dev
       - libssl-dev
@@ -175,7 +175,7 @@
   become: yes
   copy:
     src: postgresql.conf
-    dest: /etc/postgresql/9.6/main/postgresql.conf
+    dest: /etc/postgresql/11/main/postgresql.conf
     owner: postgres
     group: postgres
     mode: 0644
