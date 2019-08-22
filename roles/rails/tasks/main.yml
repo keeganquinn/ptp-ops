@@ -196,3 +196,30 @@
     name: cwnmyr
     owner: cwnmyr
     encoding: UTF-8
+
+- name: Copy cwnmyr seed script
+  become: yes
+  copy:
+    src: cwnmyr_seed.sh
+    dest: /home/deploy
+    owner: deploy
+    group: deploy
+    mode: 0755
+
+- name: Set up cron reporting
+  become: yes
+  become_user: deploy
+  cron:
+    env: yes
+    name: MAILTO
+    value: cwnmyr@quinn.tk
+
+- name: Schedule cwnmyr seed
+  become: yes
+  become_user: deploy
+  cron:
+    name: cwnmyr seed
+    job: /home/deploy/cwnmyr_seed.sh
+    minute: '0'
+    hour: '3'
+    user: deploy
