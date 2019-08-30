@@ -141,14 +141,18 @@
 - name: Install Bundler for the deploy user
   become: yes
   become_user: deploy
-  shell: RBENV_VERSION=2.6.4 /home/deploy/.rbenv/shims/gem install bundler
+  shell: /home/deploy/.rbenv/shims/gem install bundler:2.0.2
+  environment:
+    RBENV_VERSION: 2.6.4
   args:
-    creates: /home/deploy/.rbenv/versions/2.6.4/bin/bundler
+    creates: /home/deploy/.rbenv/versions/2.6.4/lib/ruby/gems/2.6.0/gems/bundler-2.0.2
 
 - name: Install Foreman for the deploy user
   become: yes
   become_user: deploy
-  shell: RBENV_VERSION=2.6.4 /home/deploy/.rbenv/shims/gem install foreman
+  shell: /home/deploy/.rbenv/shims/gem install foreman
+  environment:
+    RBENV_VERSION: 2.6.4
   args:
     creates: /home/deploy/.rbenv/versions/2.6.4/bin/foreman
 
