@@ -1,0 +1,17 @@
+# -*- nginx -*-
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name nodes.personaltelco.net;
+
+    access_log off;
+
+    location /.well-known {
+        alias /srv/rails/cwnmyr/current/public/.well-known;
+    }
+
+    location / {
+        return 301 https://cwnmyr.personaltelco.net$request_uri;
+    }
+}
