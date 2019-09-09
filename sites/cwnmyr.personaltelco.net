@@ -1,3 +1,5 @@
+# -*- nginx -*-
+
 upstream cwnmyr_puma {
     server unix:///srv/rails/cwnmyr/shared/puma.sock fail_timeout=0;
 }
@@ -7,12 +9,20 @@ server {
     listen [::]:80;
     server_name cwnmyr.personaltelco.net;
 
-    return 301 https://cwnmyr.personaltelco.net$request_uri;
+    access_log off;
+
+    location /.well-known {
+        alias /srv/rails/cwnmyr/current/public/.well-known;
+    }
+
+    location / {
+        return 301 https://cwnmyr.personaltelco.net$request_uri;
+    }
 }
 
 server {
-    listen 443 ssl spdy;
-    listen [::]:443 ssl spdy;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name cwnmyr.personaltelco.net;
     ssl on;
     ssl_certificate /etc/letsencrypt/live/cwnmyr.personaltelco.net/fullchain.pem;
@@ -23,7 +33,10 @@ server {
     ssl_stapling on;
     ssl_stapling_verify on;
     ssl_trusted_certificate /etc/letsencrypt/live/cwnmyr.personaltelco.net/chain.pem;
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
+    add_header Strict-Transport-Security "max-age=31536000";
+
+    access_log /var/log/nginx/cwnmyr.personaltelco.net-access.log combined;
+    error_log /var/log/nginx/cwnmyr.personaltelco.net-error.log warn;
 
     root /srv/rails/cwnmyr/current/public;
 
