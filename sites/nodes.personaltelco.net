@@ -1,5 +1,9 @@
 # -*- nginx -*-
 
+upstream cwnmyr_puma {
+    server unix:///srv/rails/cwnmyr/shared/puma.sock fail_timeout=0;
+}
+
 server {
     listen 80;
     listen [::]:80;
